@@ -49,13 +49,18 @@ class ProductReport extends DefaultValueBinder implements FromCollection,  WithD
         $products = Product::all();
         $row = 2;
             foreach($products as $product){
-                if (!$imageResource = @imagecreatefromstring(file_get_contents('http://mx100-cedis-mkrqpwcczk.dynamic-m.com:5150/appchin/storage/app'.$product->picture))) {
-                    $imageResource = @imagecreatefromstring(file_get_contents('http://mx100-cedis-mkrqpwcczk.dynamic-m.com:5150/appchin/storage/app/vacio.jpg'));
-                }
+                // if (!$imageResource = @imagecreatefromstring(file_get_contents('http://mx100-cedis-mkrqpwcczk.dynamic-m.com:5150/appchin/storage/app'.$product->picture))) {
+                //     $imageResource = @imagecreatefromstring(file_get_contents('http://mx100-cedis-mkrqpwcczk.dynamic-m.com:5150/appchin/storage/app/vacio.jpg'));
+                // }
                 $drawing = new MemoryDrawing();
                 $drawing->setName($product->code);
                 $drawing->setDescription($product->description);
-                $drawing->setImageResource($imageResource);
+                // $drawing->setImageResource($imageResource);
+                if(is_null($product->picture)){
+                    $drawing->setPath('/hosting/php820/appchin/storage/app/vacio.jpg');
+                }else{
+                    $drawing->setPath('/hosting/php820/appchin/storage/app'.$product->picture);
+                }
                 $drawing->setWidth(90);
                 $drawing->setCoordinates('A'.$row);
                 $row++;

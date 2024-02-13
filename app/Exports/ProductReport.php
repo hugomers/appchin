@@ -52,7 +52,7 @@ class ProductReport extends DefaultValueBinder implements FromCollection,  WithD
                 // if (!$imageResource = @imagecreatefromstring(file_get_contents('http://mx100-cedis-mkrqpwcczk.dynamic-m.com:5150/appchin/storage/app'.$product->picture))) {
                 //     $imageResource = @imagecreatefromstring(file_get_contents('http://mx100-cedis-mkrqpwcczk.dynamic-m.com:5150/appchin/storage/app/vacio.jpg'));
                 // }
-                $drawing = new MemoryDrawing();
+                $drawing = new Drawing();
                 $drawing->setName($product->code);
                 $drawing->setDescription($product->description);
                 // $drawing->setImageResource($imageResource);

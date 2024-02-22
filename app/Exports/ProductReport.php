@@ -31,10 +31,12 @@ class ProductReport extends DefaultValueBinder implements FromCollection,  WithD
         $products = Product::all();
         $data = collect($products)->map(function ($fila) {
             return [
-                "picture"=>$fila->picture,
+                // "picture"=>$fila->picture,
+                "picture"=>'',
                 "code"=>$fila->code,
                 "description"=>$fila->pieces,
-                "provider"=>$fila->provider,
+                // "provider"=>$fila->provider,
+                "provider"=>'',
                 "pieces"=>$fila->pieces.' PZS',
                 "measures"=>$fila->measures,
                 "chinesse_cost"=>$fila->chinesse_cost,
@@ -49,22 +51,36 @@ class ProductReport extends DefaultValueBinder implements FromCollection,  WithD
         $products = Product::all();
         $row = 2;
             foreach($products as $product){
-                // if (!$imageResource = @imagecreatefromstring(file_get_contents('http://mx100-cedis-mkrqpwcczk.dynamic-m.com:5150/appchin/storage/app'.$product->picture))) {
-                //     $imageResource = @imagecreatefromstring(file_get_contents('http://mx100-cedis-mkrqpwcczk.dynamic-m.com:5150/appchin/storage/app/vacio.jpg'));
-                // }
-                $drawing = new Drawing();
-                $drawing->setName($product->code);
-                $drawing->setDescription($product->description);
-                // $drawing->setImageResource($imageResource);
+                $firstdrawing = new Drawing();
+                $firstdrawing->setName($product->code);
+                $firstdrawing->setDescription($product->description);
+                // $firstdrawing->setImageResource($imageResource);
                 if(is_null($product->picture)){
-                    $drawing->setPath('/var/www/html/appchin/storage/app/vacio.jpg');
+                    $firstdrawing->setPath('/var/www/html/appchin/storage/app/vacio.jpg');
+                    // $firstdrawing->setPath('C:/laragon/www/appchin/storage/app/vacio.jpg');
                 }else{
-                    $drawing->setPath('/var/www/html/appchin/storage/app'.$product->picture);
+                    $firstdrawing->setPath('/var/www/html/appchin/storage/app'.$product->picture);
+                    // $firstdrawing->setPath('C:/laragon/www/appchin/storage/app'.$product->picture);
                 }
-                $drawing->setWidth(90);
-                $drawing->setCoordinates('A'.$row);
+                $firstdrawing->setWidth(90);
+                $firstdrawing->setCoordinates('A'.$row);
+                $drawings[] = $firstdrawing;
+
+                $secondrawing = new Drawing();
+                $secondrawing->setName($product->provider);
+                $secondrawing->setDescription($product->code);
+                // $secondrawing->setImageResource($imageResource);
+                if(is_null($product->provider)){
+                    $secondrawing->setPath('/var/www/html/appchin/storage/app/vacio.jpg');
+                    // $secondrawing->setPath('C:/laragon/www/appchin/storage/app/vacio.jpg');
+                }else{
+                    $secondrawing->setPath('/var/www/html/appchin/storage/app'.$product->provider);
+                    // $secondrawing->setPath('C:/laragon/www/appchin/storage/app'.$product->provider);
+                }
+                $secondrawing->setWidth(90);
+                $secondrawing->setCoordinates('D'.$row);
                 $row++;
-                $drawings[] = $drawing;
+                $drawings[] = $secondrawing;
             }
             return $drawings;
     }

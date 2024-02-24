@@ -9,7 +9,8 @@ class FileController extends Controller
     public function AddFile(Request $request){
         if($request->hasFile('files')){
             $file = $request->file('files');
-            $file->storeAs($request->__key);
+            $filepath = 'public/'.$request->__key;
+            $file->storeAs($filepath);
             return $request->__key;
         }
     }

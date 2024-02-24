@@ -56,10 +56,10 @@ class ProductReport extends DefaultValueBinder implements FromCollection,  WithD
                 $firstdrawing->setDescription($product->description);
                 // $firstdrawing->setImageResource($imageResource);
                 if(is_null($product->picture)){
-                    $firstdrawing->setPath('/var/www/html/appchin/storage/app/vacio.jpg');
+                    $firstdrawing->setPath('/home/u665966195/domains/grupovizcarra.net/public_html/api/storage/app/public/vacio.jpg');
                     // $firstdrawing->setPath('C:/laragon/www/appchin/storage/app/vacio.jpg');
                 }else{
-                    $firstdrawing->setPath('/var/www/html/appchin/storage/app'.$product->picture);
+                    $firstdrawing->setPath('/home/u665966195/domains/grupovizcarra.net/public_html/api/storage/app/public'.$product->picture);
                     // $firstdrawing->setPath('C:/laragon/www/appchin/storage/app'.$product->picture);
                 }
                 $firstdrawing->setWidth(90);
@@ -71,10 +71,10 @@ class ProductReport extends DefaultValueBinder implements FromCollection,  WithD
                 $secondrawing->setDescription($product->code);
                 // $secondrawing->setImageResource($imageResource);
                 if(is_null($product->provider)){
-                    $secondrawing->setPath('/var/www/html/appchin/storage/app/vacio.jpg');
+                    $secondrawing->setPath('/home/u665966195/domains/grupovizcarra.net/public_html/api/storage/app/public/vacio.jpg');
                     // $secondrawing->setPath('C:/laragon/www/appchin/storage/app/vacio.jpg');
                 }else{
-                    $secondrawing->setPath('/var/www/html/appchin/storage/app'.$product->provider);
+                    $secondrawing->setPath('/home/u665966195/domains/grupovizcarra.net/public_html/api/storage/app/public'.$product->provider);
                     // $secondrawing->setPath('C:/laragon/www/appchin/storage/app'.$product->provider);
                 }
                 $secondrawing->setWidth(90);

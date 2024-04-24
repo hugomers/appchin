@@ -28,7 +28,7 @@ class ProductReport extends DefaultValueBinder implements FromCollection,  WithD
     protected $products;
 
     public function collection(){
-        $products = Product::all();
+        $products = Product::where('_download',0)->get();
         $data = collect($products)->map(function ($fila) {
             return [
                 // "picture"=>$fila->picture,
@@ -41,6 +41,7 @@ class ProductReport extends DefaultValueBinder implements FromCollection,  WithD
                 "measures"=>$fila->measures,
                 "chinesse_cost"=>$fila->chinesse_cost,
                 "mexican_cost"=>$fila->mexican_cost,
+                "gastos"=>$fila->mexican_cost - $fila->chinesse_cost,
                 "created_at"=> Date::dateTimeToExcel($fila->created_at)
             ];
         });
@@ -48,8 +49,9 @@ class ProductReport extends DefaultValueBinder implements FromCollection,  WithD
     }
 
     public function drawings(){
-        $products = Product::all();
-        $row = 2;
+        $products = Product::where('_download',0)->get();
+
+            $row = 2;
             foreach($products as $product){
                 $firstdrawing = new Drawing();
                 $firstdrawing->setName($product->code);
@@ -61,6 +63,8 @@ class ProductReport extends DefaultValueBinder implements FromCollection,  WithD
                 }else{
                     $firstdrawing->setPath('/home/u665966195/domains/grupovizcarra.net/public_html/api/storage/app/public'.$product->picture);
                     // $firstdrawing->setPath('C:/laragon/www/appchin/storage/app'.$product->picture);
+                    // $firstdrawing->setPath('C:/laragon/www/appchin/storage/app'.'/Jl1009.jpg');
+
                 }
                 $firstdrawing->setWidth(90);
                 $firstdrawing->setCoordinates('A'.$row);
@@ -76,6 +80,7 @@ class ProductReport extends DefaultValueBinder implements FromCollection,  WithD
                 }else{
                     $secondrawing->setPath('/home/u665966195/domains/grupovizcarra.net/public_html/api/storage/app/public'.$product->provider);
                     // $secondrawing->setPath('C:/laragon/www/appchin/storage/app'.$product->provider);
+                    // $secondrawing->setPath('C:/laragon/www/appchin/storage/app'.'/Jl1009.jpg');
                 }
                 $secondrawing->setWidth(90);
                 $secondrawing->setCoordinates('D'.$row);
@@ -100,8 +105,8 @@ class ProductReport extends DefaultValueBinder implements FromCollection,  WithD
 
         return [
             AfterSheet::class => function(AfterSheet $event) {
-                $filas = ['A','B','C','D','E','F','G','H','I'];
-                $products = Product::all();
+                $filas = ['A','B','C','D','E','F','G','H','I','J'];
+                $products = Product::where('_download',0)->get();
                 $lastColumn = $event->sheet->getDelegate()->getHighestColumn();
                 $lastRow = $event->sheet->getDelegate()->getHighestRow();
                 $filterRange = 'A1:' . $lastColumn . $lastRow;
@@ -167,12 +172,13 @@ class ProductReport extends DefaultValueBinder implements FromCollection,  WithD
             "CUBICAJE",
             "COSTO CHINO",
             "COSTO MEXICANO",
+            "GASTOS",
             "CREACION",
         ];
     }
     public function columnFormats(): array{
         return [
-            'I' => NumberFormat::FORMAT_DATE_DDMMYYYY,
+            'J' => NumberFormat::FORMAT_DATE_DDMMYYYY,
         ];
     }
 

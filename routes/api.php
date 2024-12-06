@@ -45,6 +45,7 @@ Route::get('/imagen/{ruta}', function($ruta){
 })->where('ruta', '.*');;
 
 Route::post('/insProduct',[ProductsController::class,'insProduct']);
+Route::post('/updateProduct',[ProductsController::class,'updateProduct']);
 Route::get('/export', [ExportController::class, 'export'])->name('export');
 
 

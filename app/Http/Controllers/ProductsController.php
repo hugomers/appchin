@@ -10,7 +10,7 @@ use App\Models\Expenses;
 class ProductsController extends Controller
 {
     public function getProducts(){
-        $products = Product::all();
+        $products = Product::where('_download',0)->get();
         $expenses = Expenses::all();
         foreach($products as $product){
             $productId = $product['id'];
@@ -104,5 +104,50 @@ class ProductsController extends Controller
 
 
         return response()->json($res);
+    }
+
+    public function updateProduct(Request $request){
+        $products= $request->products;
+        foreach($products as $product){
+            $update = Product::find($product['id']);
+            $update->_download = 1;
+            $update->save();
+        }
+        $prod = Product::where('_download',0)->get();
+        $expenses = Expenses::all();
+        foreach($prod as $product){
+            $productId = $product['id'];
+            $folderName = $product['picture'];
+            $folderPathProduct = public_path("storage/{$productId}/{$folderName}");
+            $folderNameProv = $product['provider'];
+            $folderPathProvider = public_path("storage/{$productId}/{$folderNameProv}");
+
+            if (!file_exists($folderPathProvider) || !is_dir($folderPathProvider)) {
+                $product['fileProvider'] = [];
+            }
+            if (!file_exists($folderPathProduct) || !is_dir($folderPathProduct)) {
+                $product['fileProduct'] = [];
+            }
+            $files = array_values(array_diff(scandir($folderPathProduct), ['.', '..'])); // Excluye `.` y `..`
+            $filesProv = array_values(array_diff(scandir($folderPathProvider), ['.', '..'])); // Excluye `.` y `..`
+
+
+            $filesWithUrls = array_map(function ($file) use ($productId, $folderName) {
+                    return  "{$productId}/{$folderName}/{$file}";
+            }, $files);
+
+            $filesWithUrlsProv = array_map(function ($file) use ($productId, $folderNameProv) {
+                return  "{$productId}/{$folderNameProv}/{$file}";
+            }, $filesProv);
+
+            $product['fileProduct']= $filesWithUrls;
+            $product['fileProvider']= $filesWithUrlsProv;
+
+        }
+        $res = [
+            "products"=>$prod,
+            "expenses"=>$expenses
+        ];
+        return response()->json($res,200);
     }
 }
